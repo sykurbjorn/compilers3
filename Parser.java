@@ -5,15 +5,44 @@ public class Parser {
   private Lexer m_lexer;
   private Token m_current;
   private Token m_prev;
-  
   private ErrorHandler m_errorHandler;
+  private int tempCounter = 0;
+  private int labelCounter = 0;
+
+  public int incTemp() {
+    tempCounter++;
+    return tempCounter;
+  }
+
+  public int incLabel() {
+      labelCounter++;
+      return labelCounter;
+  }
 
   public Parser(Lexer lexer, String sourceFile) {
-    codegen = new CodeGenerator();
+    CodeGenerator codegen = new CodeGenerator();
     m_errorHandler = new ErrorHandler(lexer, sourceFile);
     m_lexer = lexer;
     readNextToken();    
   }
+
+
+  protected SymbolTableEntry newTemp(){
+      // generates next temporary name (t1, t2, ...)
+      SymbolTableEntry newTemp = new SymbolTableEntry("t" + incTemp());
+      SymbolTable.insert(newTemp.toString());
+
+      return newTemp;
+  }
+
+  protected SymbolTableEntry newLabel(){
+      SymbolTableEntry newLabel = new SymbolTableEntry("lab" + incLabel());
+      SymbolTable.insert(newLabel.toString());
+
+      CodeGenerator.generate(TacCode.LABEL, null, null, newLabel);
+      return newLabel;
+    }
+
 
   /*
     Reads the next token.
