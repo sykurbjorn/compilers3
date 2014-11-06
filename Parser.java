@@ -31,11 +31,12 @@ public class Parser {
       // generates next temporary name (t1, t2, ...)
       SymbolTableEntry newTemp = new SymbolTableEntry("t" + incTemp());
       SymbolTable.insert(newTemp.toString());
+      CodeGenerator.generate(TacCode.VAR, null, null, newTemp);
 
       return newTemp;
   }
 
-  protected SymbolTableEntry newLabel(){
+  public SymbolTableEntry newLabel(){
       SymbolTableEntry newLabel = new SymbolTableEntry("lab" + incLabel());
       SymbolTable.insert(newLabel.toString());
 
