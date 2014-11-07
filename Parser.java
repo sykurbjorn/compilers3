@@ -8,6 +8,11 @@ public class Parser {
   private ErrorHandler m_errorHandler;
   private int tempCounter = 0;
   private int labelCounter = 0;
+//  private SymbolTable m_symbolTable = new SymbolTable();
+//
+//  public SymbolTable getSymbolTable(){
+//      return this.m_symbolTable;
+//  }
 
   public int incTemp() {
     tempCounter++;
@@ -21,6 +26,9 @@ public class Parser {
 
   public Parser(Lexer lexer, String sourceFile) {
     CodeGenerator codegen = new CodeGenerator();
+      // initializing symbol table
+    SymbolTable.insert("0");
+    SymbolTable.insert("1");
     m_errorHandler = new ErrorHandler(lexer, sourceFile);
     m_lexer = lexer;
     readNextToken();    
@@ -36,12 +44,12 @@ public class Parser {
       return newTemp;
   }
 
-  public SymbolTableEntry newLabel(){
+  public void newLabel(){
+      // lab1, lab2, ...
       SymbolTableEntry newLabel = new SymbolTableEntry("lab" + incLabel());
       SymbolTable.insert(newLabel.toString());
 
       CodeGenerator.generate(TacCode.LABEL, null, null, newLabel);
-      return newLabel;
     }
 
 
